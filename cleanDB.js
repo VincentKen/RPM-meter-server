@@ -20,7 +20,8 @@ let db = new sqlite3.Database('db', (err) => {
                 }
                 db.run(`CREATE TABLE IF NOT EXISTS records(
                     id integer PRIMARY KEY,
-                    value integer NOT NULL,
+                    value float NOT NULL,
+		    rpm integer NOT NULL,
                     timestamp integer NOT NULL,
                     rollator_id integer NOT NULL,
                     FOREIGN KEY (rollator_id) REFERENCES rollators (id)

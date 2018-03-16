@@ -14,7 +14,8 @@ const typeDefs = fs.readFileSync(schemaFile, "utf-8");
 const resolvers = {
     Query: {
         Rollators: (_, {}, context) => context.db.all('SELECT * FROM rollators', []),
-        Rollator: (_, { id }, context) => context.db.get('SELECT * FROM rollators WHERE id = ?', [id])
+        Rollator: (_, { id }, context) => context.db.get('SELECT * FROM rollators WHERE id = ?', [id]),
+	RollatorByName: (_, { name }, context) => context.db.all('SELECT * FROM rollators WHERE name = ?', [id])
     },
     Rollator: {
         Records: (rollator, _, context) => context.db.all('SELECT * FROM records WHERE rollator_id = ?', [rollator.id]),
@@ -22,7 +23,7 @@ const resolvers = {
     Mutation: {
         Record: (_, { value, RPM, timestamp, rollator_id }, context) => {
             if (!timestamp) {
-                timestamp = new Date.getTime();
+                timestamp = new Date().getTime();
             }
             context.db.get('INSERT INTO records(value, rpm, timestamp, rollator_id) VALUES(?, ?, ?, ?)', [value, RPM, timestamp, rollator_id])
         },
@@ -55,7 +56,8 @@ let db = new sqlite3.Database('db', (err) => {
         }
         db.run(`CREATE TABLE IF NOT EXISTS records(
             id integer PRIMARY KEY,
-            value integer NOT NULL,
+            value float NOT NULL,
+	    rpm integer NOT NULL,
             timestamp integer NOT NULL,
             rollator_id integer NOT NULL,
             FOREIGN KEY (rollator_id) REFERENCES rollators (id)

@@ -2,7 +2,7 @@ type Record {
     id: ID!
     # speed in Meter per Minute
     value: Float!
-    RPM: Int!
+    rpm: Int!
     # timestamp in milliseconds when speed was measured
     timestamp: String!
     Rollator: Rollator!
@@ -16,11 +16,11 @@ type Rollator {
 
 type Query {
     Rollator(id: ID!): Rollator
-    Rollator(name: String!): Rollator
+    RollatorByName(name: String!): [Rollator]
     Rollators(limit: Int): [Rollator]
 }
 
 type Mutation {
-    Record(value: Float!, RPM: Int!, timestamp: String, rollator_id: Int!): Record
+    Record(value: Float!, rpm: Int!, timestamp: String, rollator_id: Int!): Record
     registerRollator(name: String!): Rollator
 }
